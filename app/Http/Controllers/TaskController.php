@@ -30,6 +30,8 @@ class TaskController extends Controller
         ]);
 
         $task = Task::create($validated);
+        \App\Events\TaskCreated::dispatch($task);
+
         return response()->json($task, 201);
     }
 
