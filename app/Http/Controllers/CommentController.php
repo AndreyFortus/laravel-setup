@@ -12,7 +12,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Comment::all(), 200);
     }
 
     /**
@@ -20,7 +20,13 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'task_id' => 'required|exists:tasks,id',
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $comment = Comment::create($validated);
+        return response()->json($comment, 201);
     }
 
     /**
@@ -28,7 +34,7 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        //
+        return response()->json($comment, 200);
     }
 
     /**
@@ -36,7 +42,12 @@ class CommentController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {
-        //
+        $validated = $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $comment->update($validated);
+        return response()->json($comment, 200);
     }
 
     /**
@@ -44,6 +55,7 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+        $comment->delete();
+        return response()->json(null, 204);
     }
 }

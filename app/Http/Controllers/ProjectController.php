@@ -36,7 +36,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        return response()->json($project, 200);
     }
 
     /**
@@ -44,7 +44,13 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $project->update($validated);
+        return response()->json($project, 200);
     }
 
     /**
@@ -52,6 +58,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project->delete();
+        return response()->json(null, 204);
     }
 }
